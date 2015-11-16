@@ -80,7 +80,7 @@ void setup() {
 //  }
 
 //  while (true){
-//    forward(255);
+//    turnR(255);
 //   
 //  }
 //  
@@ -99,40 +99,39 @@ void loop() {
     servoRight();
     distanceMedian.addValue(analogRead(0));
     
-    if (leftReading() == -1 && rightReading() != -1){
+    if (rightReading() == -1 && midReading() == -1){
 //      halt();
-      forward(250);
-      delay(10);
-//      Serial.println("forward");
-    }
-
-    // if right is black, turn right
-    else if (rightReading() == -1 && midReading() == -1){
-//      halt();
-      turnR(250);
-      delay(10);
+      turnR(140);
+      delay(20);
       
-//      Serial.println("right");
+      Serial.println("right");
     }
 
     // if left is white, turn left
     else if (leftReading() == 1 && midReading() == 1){
 //      halt();
-      turnL(250);
-      delay(10);
-//      Serial.println("left");
+      turnL(140);
+      delay(20);
+      Serial.println("left");
     }
     else{
       forward(250);
-      delay(10);
-//      Serial.println("forward");
+      delay(20);
+      Serial.println("forward");
     }
 
-    if (distanceMedian.getMedian() < 195){
+    if (distanceMedian.getMedian() < 188){
       tone(4,500);
       delay(100);
       noTone(4);
-      turnR(255);
+      halt();
+      turnR(200);
+      delay(120);
+      halt();
+      forward(150);
+      delay(120);
+      turnR(200);
+      delay(300);
       
       halt();
       break;
@@ -140,13 +139,31 @@ void loop() {
     
   }
 
-  while (true){
-      halt();
-  }
-
   // state two: on the blue line, forward until distance sensor reads a large value
   //            then determine the station num, and decide whether to broadcast or 
   //            bump
+
+  while (true){
+      // forward a little bit to exit the black circle
+      halt();
+      forward(200);
+      delay(100);
+      halt();
+
+      // turn until see the blue line
+      while (midReading() != 0){
+        turnR();
+      }
+      halt();
+      
+      // follow the blue line
+      // turn the distance sensor to the front
+
+      // if distance reading > 500
+      // read gold code
+      // determine whether bump or broadcast
+      // do the appropriate action
+  }
 
   // state three: finish taking the beacon, backward back along the blue line 
   //              turn the distance sensor backwards
