@@ -146,7 +146,7 @@ void loop() {
   while (true){
       // forward a little bit to exit the black circle
       halt();
-      forward(200);
+      forward(210);
       delay(100);
       halt();
 
