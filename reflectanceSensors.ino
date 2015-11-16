@@ -6,12 +6,12 @@ const int black_lo = 900;
 
 const int left_white_hi = 500;
 const int left_blue_hi = 790;
-const int left_blue_lo = 500;
+const int left_blue_lo = 500; //500
 const int left_black_lo = 900;
 
 const int right_white_hi = 500;
 const int right_blue_hi = 790;
-const int right_blue_lo = 500;
+const int right_blue_lo = 500; //500
 const int right_black_lo = 900;
 
 /* Pins for the left, middle and right reflectance sensors*/

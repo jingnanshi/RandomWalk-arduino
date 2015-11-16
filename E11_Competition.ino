@@ -79,10 +79,36 @@ void setup() {
 //    servoRight();
 //  }
 
-//  while (true){
-//    turnR(255);
-//   
-//  }
+  while (true){
+ takeMeasurement();
+  binarizeMeasurement();
+  /*
+       1 - 9 ----> white
+       -1 - -9 -----> green
+       11 - 19 -----> red
+       -99 ------> did not read anything
+  */
+  
+  int goldCode = fullCorrelate();
+  int stationNum = readStationNum(goldCode);
+
+   /*red = 2
+   green = 0
+   white = 1*/
+  int color = convertToColor(goldCode);
+
+  // make sure the robot is on the line
+
+  if (goldCode != (-99))  // if a gold code was detected:
+  {
+    Serial.println("Detected Gold Code: ");
+    Serial.println(goldCode);
+    Serial.println("Detected Station: ");
+    Serial.println(stationNum);
+    Serial.println("Color: ");
+    Serial.println(color);
+  }
+  }
 //  
 }
 
@@ -94,71 +120,112 @@ void loop() {
 
   /* Black: -1 Blue: 0  White: 1 */
   
-  while (true){
-    
-    servoRight();
-    distanceMedian.addValue(analogRead(0));
-    
-    if (rightReading() == -1 && midReading() == -1){
+//  while (true){
+//    
+//    servoRight();
+//    distanceMedian.addValue(analogRead(0));
+//    
+//    if (rightReading() == -1 && midReading() == -1){
+//
+//      turnR(140);
+//      delay(20);
+//      
+//      Serial.println("right");
+//    }
+//
+//    // if left is white, turn left
+//    else if (leftReading() == 1 && midReading() == 1){
+//
+//      turnL(140);
+//      delay(20);
+//      Serial.println("left");
+//    }
+//    else{
+//      forward(250);
+//      delay(20);
+//      Serial.println("forward");
+//    }
+//
+//    if (distanceMedian.getMedian() < 188){
+//      tone(4,500);
+//      delay(100);
+//      noTone(4);
 //      halt();
-      turnR(140);
-      delay(20);
-      
-      Serial.println("right");
-    }
-
-    // if left is white, turn left
-    else if (leftReading() == 1 && midReading() == 1){
+//      turnR(200);
+//      delay(120);
 //      halt();
-      turnL(140);
-      delay(20);
-      Serial.println("left");
-    }
-    else{
-      forward(250);
-      delay(20);
-      Serial.println("forward");
-    }
-
-    if (distanceMedian.getMedian() < 188){
-      tone(4,500);
-      delay(100);
-      noTone(4);
-      halt();
-      turnR(200);
-      delay(120);
-      halt();
-      forward(150);
-      delay(120);
-      turnR(200);
-      delay(300);
-      
-      halt();
-      break;
-    }
-    
-  }
+//      forward(150);
+//      delay(120);
+//      turnR(200);
+//      delay(300);
+//      
+//      halt();
+//      break;
+//    }
+//    
+//  }
 
   // state two: on the blue line, forward until distance sensor reads a large value
   //            then determine the station num, and decide whether to broadcast or 
   //            bump
 
   while (true){
-      // forward a little bit to exit the black circle
-      halt();
-      forward(210);
-      delay(100);
-      halt();
 
+      servoFront();
+      // forward a little bit to exit the black circle
+//      halt();
+//      forward(210);
+//      delay(100);
+//      halt();
+      
       // turn until see the blue line
-      while (midReading() != 0){
-        turnR();
+      while (midReading() != 0 || rightReading() == -1 || leftReading() == -1){
+        turnR(255);
       }
       halt();
+
+      // update the distance reading array
+      for (int i = 0; i < 5; i ++){
+        distanceMedian.addValue(analogRead(0));
+      }
       
       // follow the blue line
       // turn the distance sensor to the front
-
+      while (true){
+        distanceMedian.addValue(analogRead(0));
+        Serial.println(distanceMedian.getMedian());
+        
+        if (midReading() == 0){
+          
+          forward(200);
+          delay(10);
+//          Serial.println("forward");
+        }
+        else if (rightReading() == 0){
+          halt();
+          turnR(255);
+          delay(10);
+//          Serial.println("right");
+        }
+        // if left is blue, turn left 
+        else if (leftReading() == 0){
+          halt();
+          turnL(255);
+          delay(10);
+//          Serial.println("left");
+        } else{
+          forward(200);
+          delay(30);
+//          Serial.println("forward");
+        }
+        if (distanceMedian.getMedian() > 500){
+          tone(4,500);
+          delay(100);
+          noTone(4);
+          break;
+        }  
+      }
+      
       // if distance reading > 500
       // read gold code
       // determine whether bump or broadcast

@@ -10,8 +10,14 @@ Servo servo;
 
 void servoFront(){
   initServo();
-  servo.write(82);
+  servo.write(90);
   delay(10); 
+}
+
+void servoTurnTo(int deg){
+  initServo();
+  servo.write(deg);
+  delay(7);
 }
 
 void servoRight(){
