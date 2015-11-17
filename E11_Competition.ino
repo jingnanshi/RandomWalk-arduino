@@ -35,30 +35,72 @@ void setup() {
   pinMode(13, OUTPUT);
   initMotors();
   team_color = digitalRead(teamSwitch);
-  Serial.println(team_color);
+//  Serial.println(team_color);
   initServo();
   for (int i = 0; i < 5; i ++){
     distanceMedian.addValue(analogRead(0));
   } 
   // go out and hit the bonus beacon
   // ended in the black section
-//  forward(255);
-//  delay(1100);
-//  halt();
-//  turnR(240);
-//  delay(100);
-//  halt();
-//  forward(255);
-//  delay(100);
-//  halt();
-//  backward(255);
-//  delay(50);
-//  halt();
-//  turnL(240);
-//  delay(100);
-//  halt();
+  forward(255);
+  delay(1100);
+  halt();
+  
+  turnR(255);
+  delay(150); //150
+  halt();
+  
+  forward(255);
+  delay(400);
+  halt();
+  
+  backward(255);
+  delay(180);
+  halt();
+  
+//  
+//  // turn left for a short period of time
+  turnL(255);
+  delay(500); // turn 180 to the back
+  halt();
+//
+  for (int i = 0; i < 5; i ++){
+    distanceMedian.addValue(analogRead(0));
+  } 
+//  
+  // turn left until the distance reading > 550; double check to make sure facing the center
+  while (true){
+      turnL(255);
+      delay(10);
+      if (analogRead(0) > 430){
+        break;
+      }
+  }
+  halt();
+//
+  while (analogRead(0) < 750){
+      forward(255);
+  }
+  halt();
+
+  while (true){
+    
+  }
+  // turn left for a short period of time
+  // turn the distance sensor to the front
+  // turn left until distance sensor reading > 550
+  // forward
+  // turn right for a short period of time
+  
+  
   pinMode(4, OUTPUT);
+  pinMode(13, OUTPUT);
   pinMode(14,INPUT);
+
+//  while (true){
+//    digitalWrite(13,1);
+//  }
+  
 //  while (true){
 //    int left = analogRead(16);
 //    int right = analogRead(17);
@@ -79,36 +121,6 @@ void setup() {
 //    servoRight();
 //  }
 
-  while (true){
- takeMeasurement();
-  binarizeMeasurement();
-  /*
-       1 - 9 ----> white
-       -1 - -9 -----> green
-       11 - 19 -----> red
-       -99 ------> did not read anything
-  */
-  
-  int goldCode = fullCorrelate();
-  int stationNum = readStationNum(goldCode);
-
-   /*red = 2
-   green = 0
-   white = 1*/
-  int color = convertToColor(goldCode);
-
-  // make sure the robot is on the line
-
-  if (goldCode != (-99))  // if a gold code was detected:
-  {
-    Serial.println("Detected Gold Code: ");
-    Serial.println(goldCode);
-    Serial.println("Detected Station: ");
-    Serial.println(stationNum);
-    Serial.println("Color: ");
-    Serial.println(color);
-  }
-  }
 //  
 }
 
@@ -120,50 +132,50 @@ void loop() {
 
   /* Black: -1 Blue: 0  White: 1 */
   
-//  while (true){
-//    
-//    servoRight();
-//    distanceMedian.addValue(analogRead(0));
-//    
-//    if (rightReading() == -1 && midReading() == -1){
-//
-//      turnR(140);
-//      delay(20);
-//      
-//      Serial.println("right");
-//    }
-//
-//    // if left is white, turn left
-//    else if (leftReading() == 1 && midReading() == 1){
-//
-//      turnL(140);
-//      delay(20);
-//      Serial.println("left");
-//    }
-//    else{
-//      forward(250);
-//      delay(20);
-//      Serial.println("forward");
-//    }
-//
-//    if (distanceMedian.getMedian() < 188){
-//      tone(4,500);
-//      delay(100);
-//      noTone(4);
-//      halt();
-//      turnR(200);
-//      delay(120);
-//      halt();
-//      forward(150);
-//      delay(120);
-//      turnR(200);
-//      delay(300);
-//      
-//      halt();
-//      break;
-//    }
-//    
-//  }
+ while (true){
+   
+   servoRight();
+   distanceMedian.addValue(analogRead(0));
+   
+   if (rightReading() == -1 && midReading() == -1){
+
+     turnR(140);
+     delay(20);
+     
+     Serial.println("right");
+   }
+
+   // if left is white, turn left
+   else if (leftReading() == 1 && midReading() == 1){
+
+     turnL(140);
+     delay(20);
+     Serial.println("left");
+   }
+   else{
+     forward(250);
+     delay(20);
+     Serial.println("forward");
+   }
+
+   if (distanceMedian.getMedian() < 188){
+     tone(4,500);
+     delay(100);
+     noTone(4);
+     halt();
+     turnR(200);
+     delay(120);
+     halt();
+     forward(150);
+     delay(120);
+     turnR(200);
+     delay(300);
+     
+     halt();
+     break;
+   }
+   
+ }
 
   // state two: on the blue line, forward until distance sensor reads a large value
   //            then determine the station num, and decide whether to broadcast or 
@@ -173,13 +185,13 @@ void loop() {
 
       servoFront();
       // forward a little bit to exit the black circle
-//      halt();
-//      forward(210);
-//      delay(100);
-//      halt();
+      halt();
+      forward(210);
+      delay(100);
+      halt();
       
       // turn until see the blue line
-      while (midReading() != 0 || rightReading() == -1 || leftReading() == -1){
+      while ((midReading() != 0 && midReading() != -1 )|| rightReading() == -1 || leftReading() == -1){
         turnR(255);
       }
       halt();
@@ -194,42 +206,117 @@ void loop() {
       while (true){
         distanceMedian.addValue(analogRead(0));
         Serial.println(distanceMedian.getMedian());
+
+        if (distanceMedian.getMedian() > 520){
+          halt();
+          tone(4,500);
+          delay(100);
+          noTone(4);
+          break;
+        }  
         
         if (midReading() == 0){
-          
+          halt();
           forward(200);
           delay(10);
-//          Serial.println("forward");
+          Serial.println("forward");
         }
         else if (rightReading() == 0){
           halt();
           turnR(255);
           delay(10);
-//          Serial.println("right");
+          Serial.println("right");
         }
         // if left is blue, turn left 
         else if (leftReading() == 0){
           halt();
           turnL(255);
           delay(10);
-//          Serial.println("left");
+          Serial.println("left");
         } else{
+          halt();
           forward(200);
           delay(30);
-//          Serial.println("forward");
+          Serial.println("forward");
         }
-        if (distanceMedian.getMedian() > 500){
-          tone(4,500);
-          delay(100);
-          noTone(4);
-          break;
-        }  
+        
+        
       }
       
-      // if distance reading > 500
+      // if distance has become small enough
       // read gold code
-      // determine whether bump or broadcast
-      // do the appropriate action
+      while (true){
+        takeMeasurement();
+        binarizeMeasurement();
+        /*
+       1 - 9 ----> white
+       -1 - -9 -----> green
+       11 - 19 -----> red
+       -99 ------> did not read anything
+        */
+  
+        int goldCode = fullCorrelate();
+        int stationNum = readStationNum(goldCode);
+
+         /*red = 2
+         green = 0
+         white = 1*/
+        int color = convertToColor(goldCode);
+
+        // if gold code is detected
+        if (goldCode != (-99)){
+          
+          if (team_color == color){
+            break;
+          }
+
+          // if the station number exsits
+          if (stationNum != (-1)){
+            // if the current station display color is different from our color
+            if (team_color != color){
+
+              // determine whether bump or broadcast
+              // do the appropriate action
+              boolean flash = flashable[stationNum-1];
+
+              if (flash){
+                broadcastGoldCode(stationNum, team_color);
+                // turn left and right
+                backward(255);
+                delay(100);
+                forward(255);
+                delay(100);
+                halt();
+                
+              } else {
+                forward(255);
+                delay(200);
+                halt();
+                backward(255);
+                delay(200);
+                halt();
+              }
+          
+            }
+            if (team_color != color){
+              digitalWrite(13,LOW);
+            }
+          }
+        }
+     
+      }
+       
+      tone(4,500);
+      delay(500);
+      noTone(4);
+      while (true){
+        
+      }
+      
+  }
+
+  while (true){
+    
   }
 
   // state three: finish taking the beacon, backward back along the blue line 
