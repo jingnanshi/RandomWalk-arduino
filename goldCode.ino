@@ -2,10 +2,13 @@
 /* Constants */
 
 const unsigned long delayTime = 250; // time beteen samples in [us]
-const byte numSamples = 31;
+const int numSamples = 31;
 const byte maxCorrelation = 31;
 const byte numGoldCodes = 9;
 const int broadcastLED_1 = 13;
+const int broadcastLED_2 = 10;
+const int broadcastLED_3 = 5;
+const int broadcastLED_4 = 2;
 
 /* Global Variables */
 
@@ -203,34 +206,132 @@ int dotProduct(boolean *n1,
 unsigned long Timer = micros();
 
 void broadcastGoldCode(int stationNum, int teamNum){
+//  
+//  // traverse through the corresponding gold code array
+//  for (byte i = 0; i < numSamples; i ++ ){
+//    
+//    unsigned long currentTime = micros();
+//    unsigned long nextSampleTime = micros() + delayTime; 
+//    
+//    int current_signal = GoldCodes[stationNum-1][i];
+//    
+//    // if I'm green, I have to invert the signal
+//    if (teamNum == 0){
+//      // invert the signal
+//      current_signal = invert(current_signal);
+//    }
+//
+////    Serial.print(current_signal);
+//
+//    while ( currentTime < nextSampleTime) 
+//    {
+//      // update time:
+//      currentTime = micros();
+//    };
+//    
+//    nextSampleTime = nextSampleTime + delayTime;  // increment the time
+//    
+//    // if i'm white, I don't have to invert the signal
+//    digitalWrite(broadcastLED_1, current_signal); 
+////    digitalWrite(broadcastLED_2, current_signal); 
+////    digitalWrite(broadcastLED_3, current_signal); 
+////    digitalWrite(broadcastLED_4, current_signal); 
+//  }
+
   
-  // traverse through the corresponding gold code array
-  for (int i = 0; i < numSamples; i ++ ){
-    
-    unsigned long currentTime = micros();
-    unsigned long nextSampleTime = micros() + delayTime; 
-    
-    int current_signal = GoldCodes[stationNum-1][i];
-    
-    // if I'm green, I have to invert the signal
-    if (teamNum == 0){
-      // invert the signal
-      current_signal = invert(current_signal);
-    }
-
-//    Serial.print(current_signal);
-
-    while ( currentTime < nextSampleTime) 
-    {
-      // update time:
-      currentTime = micros();
-    };
-    
-    nextSampleTime = nextSampleTime + delayTime;  // increment the time
-    
-    // if i'm white, I don't have to invert the signal
-    digitalWrite(broadcastLED_1, current_signal); 
-  }
+//    
+////  // traverse through the corresponding gold code array
+//  for (int i = 0; i < numSamples; i ++ ){
+//    
+//    unsigned long currentTime = micros();
+//    unsigned long nextSampleTime = micros() + delayTime; 
+//    
+//    int current_signal = GoldCodes[stationNum-1][i];
+//    
+//    // if I'm green, I have to invert the signal
+//    if (teamNum == 0){
+//      // invert the signal
+//      current_signal = invert(current_signal);
+//    }
+//
+////    Serial.print(current_signal);
+//
+//    while ( currentTime < nextSampleTime) 
+//    {
+//      // update time:
+//      currentTime = micros();
+//    };
+//    
+//    nextSampleTime = nextSampleTime + delayTime;  // increment the time
+//    
+//    // if i'm white, I don't have to invert the signal
+////    digitalWrite(broadcastLED_1, current_signal); 
+//    digitalWrite(broadcastLED_2, current_signal); 
+////    digitalWrite(broadcastLED_3, current_signal); 
+////    digitalWrite(broadcastLED_4, current_signal); 
+//  }
+////  
+////  // traverse through the corresponding gold code array
+//  for (int i = 0; i < numSamples; i ++ ){
+//    
+//    unsigned long currentTime = micros();
+//    unsigned long nextSampleTime = micros() + delayTime; 
+//    
+//    int current_signal = GoldCodes[stationNum-1][i];
+//    
+//    // if I'm green, I have to invert the signal
+//    if (teamNum == 0){
+//      // invert the signal
+//      current_signal = invert(current_signal);
+//    }
+//
+////    Serial.print(current_signal);
+//
+//    while ( currentTime < nextSampleTime) 
+//    {
+//      // update time:
+//      currentTime = micros();
+//    };
+//    
+//    nextSampleTime = nextSampleTime + delayTime;  // increment the time
+//    
+//    // if i'm white, I don't have to invert the signal
+////    digitalWrite(broadcastLED_1, current_signal); 
+////    digitalWrite(broadcastLED_2, current_signal); 
+//    digitalWrite(broadcastLED_3, current_signal); 
+////    digitalWrite(broadcastLED_4, current_signal); 
+//  }
+////
+////  // traverse through the corresponding gold code array
+//  for (int i = 0; i < numSamples; i ++ ){
+//    
+//    unsigned long currentTime = micros();
+//    unsigned long nextSampleTime = micros() + delayTime; 
+//    
+//    int current_signal = GoldCodes[stationNum-1][i];
+//    
+//    // if I'm green, I have to invert the signal
+//    if (teamNum == 0){
+//      // invert the signal
+//      current_signal = invert(current_signal);
+//    }
+//
+////    Serial.print(current_signal);
+//
+//    while ( currentTime < nextSampleTime) 
+//    {
+//      // update time:
+//      currentTime = micros();
+//    };
+//    
+//    nextSampleTime = nextSampleTime + delayTime;  // increment the time
+//    
+//    // if i'm white, I don't have to invert the signal
+////    digitalWrite(broadcastLED_1, current_signal); 
+////    digitalWrite(broadcastLED_2, current_signal); 
+////    digitalWrite(broadcastLED_3, current_signal); 
+//    digitalWrite(broadcastLED_4, current_signal); 
+//  }
   
 }
 

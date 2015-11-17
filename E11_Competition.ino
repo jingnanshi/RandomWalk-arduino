@@ -33,7 +33,16 @@ void setup() {
   Serial.begin(9600);
   pinMode(4, OUTPUT);
   pinMode(13, OUTPUT);
+  pinMode(10, OUTPUT);
+  pinMode(2, OUTPUT);
+  pinMode(5, OUTPUT);
   pinMode(14,INPUT);
+  initServo();
+  
+  while (true){
+    servoRight();
+    broadcastGoldCode(8, 0);
+  }
   
   initMotors();
   team_color = digitalRead(teamSwitch);
