@@ -62,9 +62,9 @@ void setup() {
   
 //  
 //  // turn left for a short period of time
-//  turnL(255);
-//  delay(350); // turn 180 to the back
-//  halt();
+  turnL(255);
+  delay(350); // turn 180 to the back
+  halt();
 //
   for (int i = 0; i < 5; i ++){
     distanceMedian.addValue(analogRead(0));
@@ -120,15 +120,19 @@ void setup() {
 //    servoRight();
 //  }
 
-//  
-    while (true){
-      
-    }
-
+    servoRight();
+    delay(1000);
+    for (int i = 0; i < 5; i ++){
+      distanceMedian.addValue(analogRead(0));
+    } 
+  
 }
 
 void loop() {
-
+  for (int i = 0; i < 5; i ++){
+    distanceMedian.addValue(analogRead(0));
+  } 
+  
   team_color = digitalRead(teamSwitch);
 
   // state one: on the black rim, trying to go to the blue line
@@ -138,7 +142,10 @@ void loop() {
  while (true){
    
    servoRight();
-   distanceMedian.addValue(analogRead(0));
+//   distanceMedian.addValue(analogRead(0));
+   for (int i = 0; i < 5; i ++){
+    distanceMedian.addValue(analogRead(0));
+   } 
    
    if (rightReading() == -1 && midReading() == -1){
 
@@ -164,6 +171,7 @@ void loop() {
     distanceMedian.addValue(analogRead(0));
     
    if (distanceMedian.getMedian() < 188){
+     halt();
      tone(4,500);
      delay(100);
      noTone(4);
@@ -182,9 +190,7 @@ void loop() {
    
  }
 
- while (true){
-  
- }
+
 
   // state two: on the blue line, forward until distance sensor reads a large value
   //            then determine the station num, and decide whether to broadcast or 
