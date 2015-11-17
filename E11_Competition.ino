@@ -31,8 +31,10 @@ boolean game_end = false;
 void setup() {
 
   Serial.begin(9600);
-
+  pinMode(4, OUTPUT);
   pinMode(13, OUTPUT);
+  pinMode(14,INPUT);
+  
   initMotors();
   team_color = digitalRead(teamSwitch);
 //  Serial.println(team_color);
@@ -47,11 +49,11 @@ void setup() {
   halt();
   
   turnR(255);
-  delay(150); //150
+  delay(120); //150
   halt();
   
   forward(255);
-  delay(400);
+  delay(300);
   halt();
   
   backward(255);
@@ -60,9 +62,9 @@ void setup() {
   
 //  
 //  // turn left for a short period of time
-  turnL(255);
-  delay(500); // turn 180 to the back
-  halt();
+//  turnL(255);
+//  delay(350); // turn 180 to the back
+//  halt();
 //
   for (int i = 0; i < 5; i ++){
     distanceMedian.addValue(analogRead(0));
@@ -71,21 +73,20 @@ void setup() {
   // turn left until the distance reading > 550; double check to make sure facing the center
   while (true){
       turnL(255);
-      delay(10);
-      if (analogRead(0) > 430){
+      if (midReading() == -1 || leftReading() == -1){
         break;
       }
   }
   halt();
 //
-  while (analogRead(0) < 750){
-      forward(255);
-  }
-  halt();
+//  while (analogRead(0) < 750){
+//      forward(140);
+//  }
+//  halt();
 
-  while (true){
-    
-  }
+//  while (true){
+//    
+//  }
   // turn left for a short period of time
   // turn the distance sensor to the front
   // turn left until distance sensor reading > 550
@@ -93,9 +94,7 @@ void setup() {
   // turn right for a short period of time
   
   
-  pinMode(4, OUTPUT);
-  pinMode(13, OUTPUT);
-  pinMode(14,INPUT);
+
 
 //  while (true){
 //    digitalWrite(13,1);
@@ -122,6 +121,10 @@ void setup() {
 //  }
 
 //  
+    while (true){
+      
+    }
+
 }
 
 void loop() {
@@ -139,8 +142,8 @@ void loop() {
    
    if (rightReading() == -1 && midReading() == -1){
 
-     turnR(140);
-     delay(20);
+     turnR(255);
+     delay(5);
      
      Serial.println("right");
    }
@@ -148,33 +151,39 @@ void loop() {
    // if left is white, turn left
    else if (leftReading() == 1 && midReading() == 1){
 
-     turnL(140);
-     delay(20);
+     turnL(255);
+     delay(5);
      Serial.println("left");
    }
    else{
      forward(250);
-     delay(20);
+     delay(10);
      Serial.println("forward");
    }
-
+   
+    distanceMedian.addValue(analogRead(0));
+    
    if (distanceMedian.getMedian() < 188){
      tone(4,500);
      delay(100);
      noTone(4);
      halt();
-     turnR(200);
-     delay(120);
+     turnR(255);
+     delay(230);
      halt();
-     forward(150);
-     delay(120);
-     turnR(200);
-     delay(300);
+//     forward(150);
+//     delay(120);
+//     turnR(255);
+//     delay(300);
      
      halt();
      break;
    }
    
+ }
+
+ while (true){
+  
  }
 
   // state two: on the blue line, forward until distance sensor reads a large value
