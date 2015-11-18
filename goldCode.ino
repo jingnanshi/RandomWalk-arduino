@@ -205,7 +205,45 @@ int dotProduct(boolean *n1,
 
 unsigned long Timer = micros();
 
+int flashon(){
+  unsigned long endt = micros()+250;
+  while (true){
+    if (micros() > endt){
+      return HIGH;
+    }
+  }
+}
+
+int flashoff(){
+  unsigned long endt = micros()+250;
+  while (true){
+    if (micros() > endt){
+      return LOW;
+    }
+  }
+}
+
 void broadcastGoldCode(int stationNum, int teamNum){
+   // green invert the signal
+    if (teamNum == 0){
+      for (int i = 0; i < 31; i ++){
+        if (GoldCodes[stationNum-1][i] == 1){
+          digitalWrite(broadcastLED_1, flashoff()); 
+        } else {
+          digitalWrite(broadcastLED_1, flashon()); 
+        }
+      }
+
+    } else {
+      for (int i = 0; i < 31; i ++){
+        if (GoldCodes[stationNum-1][i] == 1){
+          digitalWrite(broadcastLED_1, flashon()); 
+        } else {
+          digitalWrite(broadcastLED_1, flashoff()); 
+        }
+      }
+    }
+    
 //  
 //  // traverse through the corresponding gold code array
 //  for (byte i = 0; i < numSamples; i ++ ){
