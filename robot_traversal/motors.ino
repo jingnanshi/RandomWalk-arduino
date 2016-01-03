@@ -8,9 +8,10 @@
 #define LEN 6
 #define REN 11
 
-void motorEn(){
-  analogWrite(LEN, 255);
-  analogWrite(REN, 255);
+
+void motorEn(int pl){
+  analogWrite(LEN, pl);
+  analogWrite(REN, pl);
 }
 
 void initMotors(){
@@ -23,7 +24,7 @@ void initMotors(){
 }
 
 void halt(){
-  motorEn();
+  motorEn(255);
   analogWrite(LPLUS, 0);
   analogWrite(LMINUS, 0); 
 
@@ -32,7 +33,7 @@ void halt(){
 }
 
 void forward(int powerLevel){
-  motorEn();
+  motorEn(powerLevel);
   analogWrite(LPLUS, powerLevel);
   analogWrite(LMINUS, 0); 
 
@@ -41,7 +42,7 @@ void forward(int powerLevel){
 }
 
 void backward(int powerLevel){
-  motorEn();
+  motorEn(powerLevel);
   analogWrite(LPLUS, 0);
   analogWrite(LMINUS, powerLevel); 
 
@@ -52,7 +53,7 @@ void backward(int powerLevel){
 
 // turn left indefinitely 
 void turnL(int powerLevel){
-  motorEn();
+  motorEn(powerLevel);
   analogWrite(LPLUS, 0);
   analogWrite(LMINUS, powerLevel); 
 
@@ -62,7 +63,7 @@ void turnL(int powerLevel){
 
 // turn right indefinitely 
 void turnR(int powerLevel){
-  motorEn();
+  motorEn(powerLevel);
   analogWrite(LPLUS, powerLevel);
   analogWrite(LMINUS, 0); 
 
